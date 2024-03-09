@@ -12,7 +12,17 @@ public class StringCalculator {
                 return Integer.parseInt(numbers);
             }
         } else {
-            String delimiter = "[,\n]";
+            String delimiter = ",";
+            if (numbers.startsWith("//")) {
+                int delimiterEndIndex = numbers.indexOf("\n");
+                if (delimiterEndIndex != -1) {
+                    delimiter = numbers.substring(2, delimiterEndIndex);
+                    numbers = numbers.substring(delimiterEndIndex + 1);
+                } else {
+                    throw new IllegalArgumentException("Invalid input format");
+                }
+            }
+            delimiter = Pattern.quote(delimiter) + "|" + "\n";
             checkIfStringEndsWithDelimiter(numbers, delimiter);
             //Splitting the numbers based on delimiters
             String[] numbersList = numbers.split(delimiter);
