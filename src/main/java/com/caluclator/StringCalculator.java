@@ -1,5 +1,7 @@
 package com.caluclator;
 
+import java.util.regex.Pattern;
+
 public class StringCalculator {
 
     public int add(String numbers) {
@@ -11,18 +13,26 @@ public class StringCalculator {
             }
         } else {
             String delimiter = "[,\n]";
+            checkIfStringEndsWithDelimiter(numbers, delimiter);
             //Splitting the numbers based on delimiters
-            String [] numbersList = numbers.split(delimiter);
+            String[] numbersList = numbers.split(delimiter);
             //Calculating sum of the numbers fetched after splitting
             return calculateSum(numbersList);
         }
     }
 
-    private int calculateSum(String[] numbers){
+    private int calculateSum(String[] numbers) {
         int sum = 0;
-        for(String number : numbers){
+        for (String number : numbers) {
             sum += Integer.parseInt(number);
         }
         return sum;
+    }
+
+    private void checkIfStringEndsWithDelimiter(String numbers, String delimiter) {
+        String pattern = ".*" + delimiter;
+        if (Pattern.matches(pattern, numbers)) {
+            throw new IllegalArgumentException("String is not allowed to end with a separator");
+        }
     }
 }

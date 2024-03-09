@@ -35,6 +35,15 @@ public class StringCalculatorTest {
         assertEquals(6, stringCalculator.add("1,2\n3"));
     }
 
+    @Test
+    public void testStringEndsWithDelimiter() {
+        try {
+            stringCalculator.add("1,2\n3,");
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), "String is not allowed to end with a separator");
+        }
+    }
+
     @AfterEach
     public void destroy() {
         stringCalculator = null;
