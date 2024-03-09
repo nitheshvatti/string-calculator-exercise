@@ -22,8 +22,8 @@ public class StringCalculator {
                     throw new IllegalArgumentException("Invalid input format");
                 }
             }
-            delimiter = Pattern.quote(delimiter) + "|" + "\n";
             checkIfStringEndsWithDelimiter(numbers, delimiter);
+            delimiter = Pattern.quote(delimiter) + "|" + "\n";
             //Splitting the numbers based on delimiters
             String[] numbersList = numbers.split(delimiter);
             //Calculating sum of the numbers fetched after splitting
@@ -40,8 +40,7 @@ public class StringCalculator {
     }
 
     private void checkIfStringEndsWithDelimiter(String numbers, String delimiter) {
-        String pattern = ".*" + delimiter;
-        if (Pattern.matches(pattern, numbers)) {
+        if (numbers.endsWith(delimiter) || numbers.endsWith("\n")) {
             throw new IllegalArgumentException("String is not allowed to end with a separator");
         }
     }
