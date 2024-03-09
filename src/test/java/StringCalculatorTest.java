@@ -25,6 +25,16 @@ public class StringCalculatorTest {
         assertEquals(1, stringCalculator.add("1"));
     }
 
+    @Test
+    public void testAddTwoNumbers() {
+        assertEquals(3, stringCalculator.add("1,2"));
+    }
+
+    @Test
+    public void testNumbersWithNewLine() {
+        assertEquals(6, stringCalculator.add("1,2\n3"));
+    }
+
     @AfterEach
     public void destroy() {
         stringCalculator = null;

@@ -10,8 +10,19 @@ public class StringCalculator {
                 return Integer.parseInt(numbers);
             }
         } else {
-            //TODO : Implement for numbers value greater than 2
-            return 0;
+            String delimiter = "[,\n]";
+            //Splitting the numbers based on delimiters
+            String [] numbersList = numbers.split(delimiter);
+            //Calculating sum of the numbers fetched after splitting
+            return calculateSum(numbersList);
         }
+    }
+
+    private int calculateSum(String[] numbers){
+        int sum = 0;
+        for(String number : numbers){
+            sum += Integer.parseInt(number);
+        }
+        return sum;
     }
 }
