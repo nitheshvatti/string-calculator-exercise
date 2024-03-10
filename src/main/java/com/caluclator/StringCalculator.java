@@ -66,19 +66,28 @@ public class StringCalculator {
 
     private String getAllErrorsInTheString(String invalidString, String delimiter){
         delimiter = delimiter.substring(2, delimiter.length() - 4); //removing \n
+        StringBuilder currentNumber = new StringBuilder();
         StringBuilder currentString = new StringBuilder();
         StringBuilder errorString =  new StringBuilder();
         for (int i = 0; i < invalidString.length(); i++) {
             char ch = invalidString.charAt(i);
-            if (Character.isDigit(ch) || ch == '-' ) {
+            if (Character.isDigit(ch) || (ch == '-' && currentNumber.toString().isEmpty())) {
                 if (!currentString.toString().isEmpty()) {
                     errorString.append(delimiter).append(" expected but ").append(currentString)
                             .append(" found").append("\n");
                 }
                 currentString.setLength(0);
+                currentNumber.append(ch);
             } else {
+                if (isNegativeNumber(currentNumber)) {
+                    errorString.append("Negative number not allowed: ").append(currentNumber).append("\n");
+                }
+                currentNumber.setLength(0);
                 currentString.append(ch);
             }
+        }
+        if (isNegativeNumber(currentNumber)) {
+            errorString.append("Negative number not allowed: ").append(currentNumber).append("\n");
         }
         return errorString.toString();
     }
@@ -89,5 +98,9 @@ public class StringCalculator {
             negativeNumbers.append(number);
         else
             negativeNumbers.append(", ").append(number);
+    }
+
+    private boolean isNegativeNumber(StringBuilder number){
+        return !number.toString().isEmpty() && Integer.parseInt(String.valueOf(number)) < 0;
     }
 }

@@ -76,6 +76,16 @@ public class StringCalculatorTest {
     }
 
 
+    @Test
+    public void testMultipleErrors() {
+        try {
+            stringCalculator.add("//|\n1|2,-3");
+            fail("Expected exception was not thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), "| expected but , found\nNegative number not allowed: -3\n");
+        }
+    }
+
 
     @AfterEach
     public void destroy() {
