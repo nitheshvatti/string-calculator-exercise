@@ -27,14 +27,23 @@ public class StringCalculator {
             //Splitting the numbers based on delimiters
             String[] numbersList = numbers.split(delimiter);
             //Calculating sum of the numbers fetched after splitting
-            return calculateSum(numbersList);
+            return calculateSum(numbersList, delimiter);
         }
     }
 
-    private int calculateSum(String[] numbers) {
+    private int calculateSum(String[] numbers, String delimiter) {
         int sum = 0;
+        StringBuilder errorString = new StringBuilder();
         for (String number : numbers) {
-            sum += Integer.parseInt(number);
+            try {
+                sum += Integer.parseInt(number);
+            } catch (Exception e){
+                String errors = getAllErrorsInTheString(number, delimiter);
+                errorString.append(errors);
+            }
+        }
+        if (!errorString.toString().isEmpty()) {
+            throw new IllegalArgumentException(String.valueOf(errorString));
         }
         return sum;
     }
@@ -43,5 +52,24 @@ public class StringCalculator {
         if (numbers.endsWith(delimiter) || numbers.endsWith("\n")) {
             throw new IllegalArgumentException("String is not allowed to end with a separator");
         }
+    }
+
+    private String getAllErrorsInTheString(String invalidString, String delimiter){
+        delimiter = delimiter.substring(2, delimiter.length() - 4); //removing \n
+        StringBuilder currentString = new StringBuilder();
+        StringBuilder errorString =  new StringBuilder();
+        for (int i = 0; i < invalidString.length(); i++) {
+            char ch = invalidString.charAt(i);
+            if (Character.isDigit(ch) || ch == '-' ) {
+                if (!currentString.toString().isEmpty()) {
+                    errorString.append(delimiter).append(" expected but ").append(currentString)
+                            .append(" found").append("\n");
+                }
+                currentString.setLength(0);
+            } else {
+                currentString.append(ch);
+            }
+        }
+        return errorString.toString();
     }
 }
