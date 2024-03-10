@@ -65,6 +65,18 @@ public class StringCalculatorTest {
     }
 
 
+    @Test
+    public void testNegativeNumbers() {
+        try {
+            stringCalculator.add("2,-4,-9");
+            fail("Expected exception was not thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), "Negative number(s) not allowed: -4, -9");
+        }
+    }
+
+
+
     @AfterEach
     public void destroy() {
         stringCalculator = null;

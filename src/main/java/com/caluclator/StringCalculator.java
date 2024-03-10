@@ -33,14 +33,24 @@ public class StringCalculator {
 
     private int calculateSum(String[] numbers, String delimiter) {
         int sum = 0;
+        StringBuilder negativeNumbers = new StringBuilder();
         StringBuilder errorString = new StringBuilder();
         for (String number : numbers) {
             try {
-                sum += Integer.parseInt(number);
+                int integerNumber = Integer.parseInt(number);
+                if (integerNumber < 0){
+                    appendNegativeNumberToString(negativeNumbers, number);
+                }
+                else {
+                    sum += integerNumber;
+                }
             } catch (Exception e){
                 String errors = getAllErrorsInTheString(number, delimiter);
                 errorString.append(errors);
             }
+        }
+        if (!negativeNumbers.toString().isEmpty()) {
+            errorString.append("Negative number(s) not allowed: ").append(negativeNumbers);
         }
         if (!errorString.toString().isEmpty()) {
             throw new IllegalArgumentException(String.valueOf(errorString));
@@ -71,5 +81,13 @@ public class StringCalculator {
             }
         }
         return errorString.toString();
+    }
+
+
+    private void appendNegativeNumberToString(StringBuilder negativeNumbers, String number){
+        if (negativeNumbers.toString().isEmpty())
+            negativeNumbers.append(number);
+        else
+            negativeNumbers.append(", ").append(number);
     }
 }
