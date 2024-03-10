@@ -87,6 +87,12 @@ public class StringCalculatorTest {
     }
 
 
+    @Test
+    public void testLargeNumbers() {
+        assertEquals(2, stringCalculator.add("1001,2"));
+    }
+
+
     @AfterEach
     public void destroy() {
         stringCalculator = null;

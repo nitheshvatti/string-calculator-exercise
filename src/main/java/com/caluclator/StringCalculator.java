@@ -41,7 +41,7 @@ public class StringCalculator {
                 if (integerNumber < 0){
                     appendNegativeNumberToString(negativeNumbers, number);
                 }
-                else {
+                else if (integerNumber <= 1000){
                     sum += integerNumber;
                 }
             } catch (Exception e){
