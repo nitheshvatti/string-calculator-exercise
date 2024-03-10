@@ -82,7 +82,7 @@ public class StringCalculatorTest {
             stringCalculator.add("//|\n1|2,-3");
             fail("Expected exception was not thrown");
         } catch (IllegalArgumentException e) {
-            assertEquals(e.getMessage(), "| expected but , found\nNegative number not allowed: -3\n");
+            assertEquals(e.getMessage(), "| expected but , found\nNegative number(s) not allowed: -3\n");
         }
     }
 

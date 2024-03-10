@@ -2,31 +2,31 @@ package com.caluclator;
 
 import java.util.regex.Pattern;
 
+import static com.caluclator.Constants.*;
+
 public class StringCalculator {
 
     public int add(String numbers) {
         if (numbers.length() < 2) {
-            if (numbers.isEmpty()) {
-                return 0;
-            } else {
-                return Integer.parseInt(numbers);
-            }
+            return parseForLessThanTwoNumbers(numbers);
         } else {
-            String delimiter = ",";
-            if (numbers.startsWith("//")) {
-                int delimiterEndIndex = numbers.indexOf("\n");
+            String delimiter = DEFAULT_DELIMITER;
+            if (numbers.startsWith(DOUBLE_SLASH)) {
+                //Updating the delimiter
+                int delimiterEndIndex = numbers.indexOf(NEWLINE);
                 if (delimiterEndIndex != -1) {
                     delimiter = numbers.substring(2, delimiterEndIndex);
                     numbers = numbers.substring(delimiterEndIndex + 1);
                 } else {
-                    throw new IllegalArgumentException("Invalid input format");
+                    throw new IllegalArgumentException(INVALID_INPUT_FORMAT);
                 }
             }
             checkIfStringEndsWithDelimiter(numbers, delimiter);
-            delimiter = Pattern.quote(delimiter) + "|" + "\n";
+            //Updating the delimiter
+            delimiter = Pattern.quote(delimiter) + PIPE + NEWLINE;
             //Splitting the numbers based on delimiters
             String[] numbersList = numbers.split(delimiter);
-            //Calculating sum of the numbers fetched after splitting
+            //Calculating sum of the numbers after splitting
             return calculateSum(numbersList, delimiter);
         }
     }
@@ -50,7 +50,7 @@ public class StringCalculator {
             }
         }
         if (!negativeNumbers.toString().isEmpty()) {
-            errorString.append("Negative number(s) not allowed: ").append(negativeNumbers);
+            errorString.append(NEGATIVE_NUMBERS_NOT_ALLOWED).append(negativeNumbers);
         }
         if (!errorString.toString().isEmpty()) {
             throw new IllegalArgumentException(String.valueOf(errorString));
@@ -59,8 +59,8 @@ public class StringCalculator {
     }
 
     private void checkIfStringEndsWithDelimiter(String numbers, String delimiter) {
-        if (numbers.endsWith(delimiter) || numbers.endsWith("\n")) {
-            throw new IllegalArgumentException("String is not allowed to end with a separator");
+        if (numbers.endsWith(delimiter) || numbers.endsWith(NEWLINE)) {
+            throw new IllegalArgumentException(NOT_ALLOWED_TO_END_WITH_SEPARATOR);
         }
     }
 
@@ -69,25 +69,28 @@ public class StringCalculator {
         StringBuilder currentNumber = new StringBuilder();
         StringBuilder currentString = new StringBuilder();
         StringBuilder errorString =  new StringBuilder();
+        //Iterating through the string, storing numbers in currentNumber and incorrect delimiters in currentString
         for (int i = 0; i < invalidString.length(); i++) {
             char ch = invalidString.charAt(i);
             if (Character.isDigit(ch) || (ch == '-' && currentNumber.toString().isEmpty())) {
+                //Adding incorrect delimiter string to error string
                 if (!currentString.toString().isEmpty()) {
-                    errorString.append(delimiter).append(" expected but ").append(currentString)
-                            .append(" found").append("\n");
+                    errorString.append(delimiter).append(EXPECTED_BUT).append(currentString)
+                            .append(FOUND).append(NEWLINE);
                 }
                 currentString.setLength(0);
                 currentNumber.append(ch);
             } else {
+                //If number is negative, adding it to the error string
                 if (isNegativeNumber(currentNumber)) {
-                    errorString.append("Negative number not allowed: ").append(currentNumber).append("\n");
+                    errorString.append(NEGATIVE_NUMBERS_NOT_ALLOWED).append(currentNumber).append(NEWLINE);
                 }
                 currentNumber.setLength(0);
                 currentString.append(ch);
             }
         }
         if (isNegativeNumber(currentNumber)) {
-            errorString.append("Negative number not allowed: ").append(currentNumber).append("\n");
+            errorString.append(NEGATIVE_NUMBERS_NOT_ALLOWED).append(currentNumber).append(NEWLINE);
         }
         return errorString.toString();
     }
@@ -97,10 +100,18 @@ public class StringCalculator {
         if (negativeNumbers.toString().isEmpty())
             negativeNumbers.append(number);
         else
-            negativeNumbers.append(", ").append(number);
+            negativeNumbers.append(SEPARATOR).append(number);
     }
 
     private boolean isNegativeNumber(StringBuilder number){
         return !number.toString().isEmpty() && Integer.parseInt(String.valueOf(number)) < 0;
+    }
+
+    private int parseForLessThanTwoNumbers(String numbers) {
+        if (numbers.isEmpty()) {
+            return 0;
+        } else {
+            return Integer.parseInt(numbers);
+        }
     }
 }
